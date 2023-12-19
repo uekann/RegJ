@@ -1,2 +1,3 @@
 # RegJ
-Javaによる正規表現
+JavaによるDFA型の正規表現  
+(現時点ではNFA)
