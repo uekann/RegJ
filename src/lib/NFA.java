@@ -58,8 +58,10 @@ sealed public class NFA permits DFA{
                 NFA nfa1 = fromAST(t.t1);
                 NFA nfa2 = fromAST(t.t2);
                 NFA nfa = new NFA();
+                nfa.nodes.remove(nfa.start);
                 nfa.start = nfa1.start;
                 nfa1.end.addTransition(null, nfa2.start);
+                nfa.nodes.remove(nfa.end);
                 nfa.end = nfa2.end;
                 nfa.nodes.addAll(nfa1.nodes);
                 nfa.nodes.addAll(nfa2.nodes);
@@ -102,17 +104,5 @@ sealed public class NFA permits DFA{
             current = next;
         }
         return current.contains(end);
-    }
-
-    public static void test(){
-        Node n1 = new Node();
-        Node n2 = new Node();
-        Node n3 = n1;
-        n1.addTransition('a', n2);
-        HashSet<Node> nodes = new HashSet<>(List.of(n1, n2));
-        System.out.println(nodes.contains(n3));
-        System.out.println(nodes);
-        nodes.add(n3);
-        System.out.println(nodes);
     }
 }
