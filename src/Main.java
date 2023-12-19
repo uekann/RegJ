@@ -1,8 +1,9 @@
 import lib.AST;
+import lib.NFA;
 
 public class Main {
     public static void main(String[] args) {
-        AST ast = AST.parse("(a|b)*abb");
-        System.out.println(ast);
+        NFA nfa = NFA.fromAST(AST.parse("a(b|c)*d"));
+        System.out.println(nfa.match("abccccccd"));
     }
 }
