@@ -4,12 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="303ce7dc-ab5e-4746-97ee-37444641749f" name="変更" comment="ASTへのパース">
-      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="303ce7dc-ab5e-4746-97ee-37444641749f" name="変更" comment=".ideaフォルダの追加">
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/DFA.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/NFA.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/AST.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/AST.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,20 +61,12 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RunManager" selected="Application.Main">
-    <configuration name="AST" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="lib.AST" />
-      <module name="RegJ" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="lib.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
+  <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="lib" />
+    </key>
+  </component>
+  <component name="RunManager">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="ALTERNATIVE_JRE_PATH" value="openjdk-21" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
@@ -87,7 +79,6 @@
     <recent_temporary>
       <list>
         <item itemvalue="Application.Main" />
-        <item itemvalue="Application.AST" />
       </list>
     </recent_temporary>
   </component>
@@ -108,7 +99,7 @@
       <updated>1702629120486</updated>
       <workItem from="1702629121559" duration="518000" />
       <workItem from="1702629649870" duration="10521000" />
-      <workItem from="1702975595910" duration="4414000" />
+      <workItem from="1702975595910" duration="17558000" />
     </task>
     <task id="LOCAL-00001" summary="initial commit">
       <created>1702888515758</created>
@@ -124,7 +115,47 @@
       <option name="project" value="LOCAL" />
       <updated>1702888622042</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="ASTへのパース(完成)">
+      <option name="closed" value="true" />
+      <created>1702981984408</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1702981984408</updated>
+    </task>
+    <task id="LOCAL-00004" summary="java21対応">
+      <option name="closed" value="true" />
+      <created>1702982000705</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1702982000705</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Warningの解消">
+      <option name="closed" value="true" />
+      <created>1702982799088</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1702982799088</updated>
+    </task>
+    <task id="LOCAL-00006" summary="修飾子変更">
+      <option name="closed" value="true" />
+      <created>1703005053405</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1703005053405</updated>
+    </task>
+    <task id="LOCAL-00007" summary=".ideaフォルダの追加">
+      <option name="closed" value="true" />
+      <created>1703005148078</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1703005148078</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -144,18 +175,28 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="initial commit" />
     <MESSAGE value="ASTへのパース" />
-    <option name="LAST_COMMIT_MESSAGE" value="ASTへのパース" />
+    <MESSAGE value="ASTへのパース(完成)" />
+    <MESSAGE value="java21対応" />
+    <MESSAGE value="Warningの解消" />
+    <MESSAGE value="修飾子変更" />
+    <MESSAGE value=".ideaフォルダの追加" />
+    <option name="LAST_COMMIT_MESSAGE" value=".ideaフォルダの追加" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/Main.java</url>
-          <line>4</line>
-          <option name="timeStamp" value="4" />
+          <line>6</line>
+          <option name="timeStamp" value="11" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
+    <pin-to-top-manager>
+      <pinned-members>
+        <PinnedItemInfo parentTag="java.util.HashMap$Node" memberName="value" />
+      </pinned-members>
+    </pin-to-top-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
