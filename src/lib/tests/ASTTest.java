@@ -65,8 +65,8 @@ public class ASTTest {
         AST concatAB = (AST) constructors.get("Concat").newInstance(charA, charB);
         AST unionABC = (AST) constructors.get("Union").newInstance(concatAB, charC);
         AST groupUnionABC = (AST) constructors.get("Group").newInstance(unionABC);
-        AST concatABCD = (AST) constructors.get("Concat").newInstance(groupUnionABC, charD);
-        AST starABCD = (AST) constructors.get("Star").newInstance(concatABCD);
+        AST starD = (AST) constructors.get("Star").newInstance(charD);
+        AST concatABCD = (AST) constructors.get("Concat").newInstance(groupUnionABC, starD);
 
         return new HashMap<>(
                 Map.of(
@@ -77,8 +77,8 @@ public class ASTTest {
                         "ab", concatAB,
                         "ab|c", unionABC,
                         "(ab|c)", groupUnionABC,
-                        "(ab|c)d", concatABCD,
-                        "(ab|c)d*", starABCD
+                        "d*", starD,
+                        "(ab|c)d*", concatABCD
                 )
         );
     }
@@ -114,5 +114,12 @@ public class ASTTest {
 
         assert sampleAST1.equals(sampleAST1Copy);
         assert sampleAST2.equals(sampleAST2Copy);
+    }
+
+    @org.junit.jupiter.api.Test
+    void testAll() throws ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        testToString();
+        testEquals();
+        testParse();
     }
 }
