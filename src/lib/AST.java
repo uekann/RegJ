@@ -1,5 +1,8 @@
 package lib;
 
+import java.util.HashSet;
+import java.util.List;
+
 public sealed abstract class AST permits AST.Char, AST.Union, AST.Concat, AST.Star, AST.Group{
 
     AST() {}
@@ -12,6 +15,52 @@ public sealed abstract class AST permits AST.Char, AST.Union, AST.Concat, AST.St
             case Star<?> t -> STR."\{t.t.toString()}*";
             case Group<?> t -> STR."(\{t.t.toString()})";
         };
+    }
+
+    static final class Char extends AST {
+        public char c;
+
+        public Char(char c) {
+            super();
+            this.c = c;
+        }
+    }
+    static final class Union<T1 extends AST, T2 extends AST> extends AST {
+        public T1 t1;
+        public T2 t2;
+
+        public Union(T1 t1, T2 t2) {
+            super();
+            this.t1 = t1;
+            this.t2 = t2;
+        }
+    }
+    static final class Concat<T1 extends AST, T2 extends AST> extends AST {
+        public T1 t1;
+        public T2 t2;
+
+        public Concat(T1 t1, T2 t2) {
+            super();
+            this.t1 = t1;
+            this.t2 = t2;
+        }
+    }
+    static final class Star<T extends AST> extends AST {
+        public T t;
+
+        public Star(T t) {
+            super();
+            this.t = t;
+        }
+    }
+
+    static final class Group<T extends AST> extends AST {
+        public T t;
+
+        public Group(T t) {
+            super();
+            this.t = t;
+        }
     }
 
     private static AST _concat(AST t1, AST t2) {
@@ -64,51 +113,5 @@ public sealed abstract class AST permits AST.Char, AST.Union, AST.Concat, AST.St
 
     public static AST parse(String re) {
         return _parse(re, null);
-    }
-
-    public static final class Char extends AST {
-        public char c;
-
-        public Char(char c) {
-            super();
-            this.c = c;
-        }
-    }
-    public static final class Union<T1 extends AST, T2 extends AST> extends AST {
-        public T1 t1;
-        public T2 t2;
-
-        public Union(T1 t1, T2 t2) {
-            super();
-            this.t1 = t1;
-            this.t2 = t2;
-        }
-    }
-    public static final class Concat<T1 extends AST, T2 extends AST> extends AST {
-        public T1 t1;
-        public T2 t2;
-
-        public Concat(T1 t1, T2 t2) {
-            super();
-            this.t1 = t1;
-            this.t2 = t2;
-        }
-    }
-    public static final class Star<T extends AST> extends AST {
-        public T t;
-
-        public Star(T t) {
-            super();
-            this.t = t;
-        }
-    }
-
-    public static final class Group<T extends AST> extends AST {
-        public T t;
-
-        public Group(T t) {
-            super();
-            this.t = t;
-        }
     }
 }
