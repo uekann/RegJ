@@ -7,10 +7,10 @@ public sealed abstract class AST permits AST.Char, AST.Union, AST.Concat, AST.St
     public String toString() {
         return switch (this) {
             case Char c -> String.valueOf(c.c);
-            case Union t -> t.t1.toString() + "|" + t.t2.toString();
-            case Concat t -> t.t1.toString() + t.t2.toString();
-            case Star t -> t.t.toString() + "*";
-            case Group t -> "(" + t.t.toString() + ")";
+            case Union<?, ?> t -> STR."\{t.t1.toString()}|\{t.t2.toString()}";
+            case Concat<?, ?> t -> t.t1.toString() + t.t2.toString();
+            case Star<?> t -> STR."\{t.t.toString()}*";
+            case Group<?> t -> STR."(\{t.t.toString()})";
         };
     }
 
@@ -21,7 +21,7 @@ public sealed abstract class AST permits AST.Char, AST.Union, AST.Concat, AST.St
         if (t2 == null) {
             return t1;
         }
-        return new Concat(t1, t2);
+        return new Concat<>(t1, t2);
     }
 
     private static AST _parse(String re, AST ast){
@@ -45,18 +45,18 @@ public sealed abstract class AST permits AST.Char, AST.Union, AST.Concat, AST.St
                     }
                 }
                 AST t = _parse(re.substring(1, id), null);
-                yield _parse(re.substring(id+1), _concat(ast, new Group(t)));
+                yield _parse(re.substring(id+1), _concat(ast, new Group<>(t)));
             }
             case ')' -> ast;
             case '|' -> {
                 AST t = _parse(re.substring(1), null);
-                yield new Union(ast, t);
+                yield new Union<>(ast, t);
             }
             case '*' -> switch (ast) {
                 case null -> throw new RuntimeException("Nothing to repeat");
-                case Star _ -> throw new RuntimeException("Nothing to repeat");
-                case Concat t -> _parse(re.substring(1),new Concat(t.t1, new Star(t.t2)));
-                default -> _parse(re.substring(1), new Star(ast));
+                case Star<?> _ -> throw new RuntimeException("Nothing to repeat");
+                case Concat<?, ?> t -> _parse(re.substring(1),new Concat<>(t.t1, new Star<>(t.t2)));
+                default -> _parse(re.substring(1), new Star<>(ast));
             };
             default -> _parse(re.substring(1), _concat(ast, new Char(c)));
         };
