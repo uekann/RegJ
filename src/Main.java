@@ -1,5 +1,8 @@
+import lib.AST;
+
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello world!");
+        AST ast = AST.parse("(a|b)*abb");
+        System.out.println(ast);
     }
 }

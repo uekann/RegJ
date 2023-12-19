@@ -1,6 +1,6 @@
 package lib;
 
-sealed abstract class AST permits AST.Char, AST.Union, AST.Concat, AST.Star, AST.Group{
+public sealed abstract class AST permits AST.Char, AST.Union, AST.Concat, AST.Star, AST.Group{
 
     AST() {}
 
@@ -14,40 +14,59 @@ sealed abstract class AST permits AST.Char, AST.Union, AST.Concat, AST.Star, AST
         };
     }
 
+    private static AST _concat(AST t1, AST t2) {
+        if (t1 == null) {
+            return t2;
+        }
+        if (t2 == null) {
+            return t1;
+        }
+        return new Concat(t1, t2);
+    }
+
     private static AST _parse(String re, AST ast){
-        if (re.length() == 0) {
+        if (re.isEmpty()) {
             return ast;
         }
         char c = re.charAt(0);
         return switch (c) {
             case '(' -> {
-                int id = 1;
+                int id = 0;
                 int count = 1;
                 while (count > 0) {
+                    id++;
+                    if (id >= re.length()) {
+                        throw new RuntimeException("Unmatched parentheses");
+                    }
                     if (re.charAt(id) == '(') {
                         count++;
                     } else if (re.charAt(id) == ')') {
                         count--;
                     }
-                    id++;
-                    if (id >= re.length()) {
-                        throw new RuntimeException("Unmatched parentheses");
-                    }
                 }
                 AST t = _parse(re.substring(1, id), null);
-                yield _parse(re.substring(id + 1), new Group(t));
+                yield _parse(re.substring(id+1), _concat(ast, new Group(t)));
             }
             case ')' -> ast;
             case '|' -> {
                 AST t = _parse(re.substring(1), null);
-                yield _parse(re.substring(1), new Union(ast, t));
+                yield new Union(ast, t);
             }
-            case '*' -> _parse(re.substring(1), new Star(ast));
-            default -> _parse(re.substring(1), new Concat(ast, new Char(c)));
+            case '*' -> switch (ast) {
+                case null -> throw new RuntimeException("Nothing to repeat");
+                case Star _ -> throw new RuntimeException("Nothing to repeat");
+                case Concat t -> _parse(re.substring(1),new Concat(t.t1, new Star(t.t2)));
+                default -> _parse(re.substring(1), new Star(ast));
+            };
+            default -> _parse(re.substring(1), _concat(ast, new Char(c)));
         };
     }
 
-    private static final class Char extends AST {
+    public static AST parse(String re) {
+        return _parse(re, null);
+    }
+
+    public static final class Char extends AST {
         public char c;
 
         public Char(char c) {
@@ -55,7 +74,7 @@ sealed abstract class AST permits AST.Char, AST.Union, AST.Concat, AST.Star, AST
             this.c = c;
         }
     }
-    private static final class Union<T1 extends AST, T2 extends AST> extends AST {
+    public static final class Union<T1 extends AST, T2 extends AST> extends AST {
         public T1 t1;
         public T2 t2;
 
@@ -65,7 +84,7 @@ sealed abstract class AST permits AST.Char, AST.Union, AST.Concat, AST.Star, AST
             this.t2 = t2;
         }
     }
-    private static final class Concat<T1 extends AST, T2 extends AST> extends AST {
+    public static final class Concat<T1 extends AST, T2 extends AST> extends AST {
         public T1 t1;
         public T2 t2;
 
@@ -75,7 +94,7 @@ sealed abstract class AST permits AST.Char, AST.Union, AST.Concat, AST.Star, AST
             this.t2 = t2;
         }
     }
-    private static final class Star<T extends AST> extends AST {
+    public static final class Star<T extends AST> extends AST {
         public T t;
 
         public Star(T t) {
@@ -84,7 +103,7 @@ sealed abstract class AST permits AST.Char, AST.Union, AST.Concat, AST.Star, AST
         }
     }
 
-    private static final class Group<T extends AST> extends AST {
+    public static final class Group<T extends AST> extends AST {
         public T t;
 
         public Group(T t) {
