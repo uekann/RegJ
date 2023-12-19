@@ -10,6 +10,7 @@ import java.util.Map;
 public class ASTTest {
 
     HashMap<String, Constructor<?>> getConstructors() throws ClassNotFoundException, NoSuchMethodException {
+        // ASTのインナークラス(Char, Union, Concat, Star, Group)のコンストラクタを取得
         HashMap<String, Constructor<?>> constructors = new HashMap<>(
                 Map.of(
                         "Char", Class.forName("lib.AST$Char").getDeclaredConstructor(char.class),
@@ -20,6 +21,7 @@ public class ASTTest {
                 )
         );
 
+        // コンストラクタをアクセス可能にする
         for(Constructor<?> constructor : constructors.values()){
             constructor.setAccessible(true);
         }
@@ -28,8 +30,11 @@ public class ASTTest {
     }
 
     HashMap<String, AST> constructSampleAST1() throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+
+        // ASTのインナークラス(Char, Union, Concat, Star, Group)のアクセス可能なコンストラクタを取得
         HashMap<String, Constructor<?>> constructors = getConstructors();
 
+        // ASTのサンプルの作成
         AST charA = (AST) constructors.get("Char").newInstance('a');
         AST charB = (AST) constructors.get("Char").newInstance('b');
         AST charC = (AST) constructors.get("Char").newInstance('c');
@@ -84,8 +89,12 @@ public class ASTTest {
     }
     @org.junit.jupiter.api.Test
     void testToString() throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+
+        // ASTのサンプルを取得
         HashMap<String, AST> sampleAST1 = constructSampleAST1();
         HashMap<String, AST> sampleAST2 = constructSampleAST2();
+
+        // ASTの文字列化のテスト
         for(Map.Entry<String, AST> entry : sampleAST1.entrySet()){
             assert entry.getValue().toString().equals(entry.getKey());
         }
@@ -96,22 +105,28 @@ public class ASTTest {
 
     @org.junit.jupiter.api.Test
     void testEquals() throws ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+
+        // ASTの複数の同一(構造は同一だがオブジェクトは別)なサンプルを取得
         AST sampleAST1 = constructSampleAST1().get("a(b|c)*d");
         AST sampleAST1Copy = constructSampleAST1().get("a(b|c)*d");
         AST sampleAST2 = constructSampleAST2().get("(ab|c)d*");
         AST sampleAST2Copy = constructSampleAST2().get("(ab|c)d*");
 
+        // ASTの等価性のテスト
         assert sampleAST1.equals(sampleAST1Copy);
         assert sampleAST2.equals(sampleAST2Copy);
     }
 
     @org.junit.jupiter.api.Test
     void testParse() throws ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+
+        // ASTのサンプルと構文解析によって得られるASTを取得
         AST sampleAST1 = AST.parse("a(b|c)*d");
         AST sampleAST1Copy = constructSampleAST1().get("a(b|c)*d");
         AST sampleAST2 = AST.parse("(ab|c)d*");
         AST sampleAST2Copy = constructSampleAST2().get("(ab|c)d*");
 
+        // ASTの等価性のテスト
         assert sampleAST1.equals(sampleAST1Copy);
         assert sampleAST2.equals(sampleAST2Copy);
     }
