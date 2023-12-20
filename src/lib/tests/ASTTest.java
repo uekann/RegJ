@@ -1,15 +1,18 @@
 package lib.tests;
 
 import lib.AST;
+import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class ASTTest {
 
-    HashMap<String, Constructor<?>> getConstructors() throws ClassNotFoundException, NoSuchMethodException {
+    static HashMap<String, Constructor<?>> getConstructors() throws ClassNotFoundException, NoSuchMethodException {
         // ASTのインナークラス(Char, Union, Concat, Star, Group)のコンストラクタを取得
         HashMap<String, Constructor<?>> constructors = new HashMap<>(
                 Map.of(
@@ -87,7 +90,7 @@ public class ASTTest {
                 )
         );
     }
-    @org.junit.jupiter.api.Test
+    @Test
     void testToString() throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, ClassNotFoundException {
 
         // ASTのサンプルを取得
@@ -96,14 +99,14 @@ public class ASTTest {
 
         // ASTの文字列化のテスト
         for(Map.Entry<String, AST> entry : sampleAST1.entrySet()){
-            assert entry.getValue().toString().equals(entry.getKey());
+            assertThat(entry.getValue().toString()).isEqualTo(entry.getKey());
         }
         for(Map.Entry<String, AST> entry : sampleAST2.entrySet()){
-            assert entry.getValue().toString().equals(entry.getKey());
+            assertThat(entry.getValue().toString()).isEqualTo(entry.getKey());
         }
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void testEquals() throws ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
 
         // ASTの複数の同一(構造は同一だがオブジェクトは別)なサンプルを取得
@@ -113,11 +116,11 @@ public class ASTTest {
         AST sampleAST2Copy = constructSampleAST2().get("(ab|c)d*");
 
         // ASTの等価性のテスト
-        assert sampleAST1.equals(sampleAST1Copy);
-        assert sampleAST2.equals(sampleAST2Copy);
+        assertThat(sampleAST1).isEqualTo(sampleAST1Copy);
+        assertThat(sampleAST2).isEqualTo(sampleAST2Copy);
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void testParse() throws ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
 
         // ASTのサンプルと構文解析によって得られるASTを取得
@@ -127,14 +130,7 @@ public class ASTTest {
         AST sampleAST2Copy = constructSampleAST2().get("(ab|c)d*");
 
         // ASTの等価性のテスト
-        assert sampleAST1.equals(sampleAST1Copy);
-        assert sampleAST2.equals(sampleAST2Copy);
-    }
-
-    @org.junit.jupiter.api.Test
-    void testAll() throws ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        testToString();
-        testEquals();
-        testParse();
+        assertThat(sampleAST1).isEqualTo(sampleAST1Copy);
+        assertThat(sampleAST2).isEqualTo(sampleAST2Copy);
     }
 }
