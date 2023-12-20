@@ -4,24 +4,34 @@ import java.util.*;
 
 sealed public class NFA permits DFA{
     private static class Node {
-        HashMap<Character, HashSet<Node>> transitions;
+        HashMap<Character, HashSet<Node>> transitionsTo;
+        HashMap<Character, HashSet<Node>> transitionsFrom;
         int id;
         Node(){
-            transitions = new HashMap<>();
+            transitionsTo = new HashMap<>();
+            transitionsFrom = new HashMap<>();
             id = 0;
         }
 
         public void addTransition(Character c, Node n){
-            if(transitions.containsKey(c)){
-                transitions.get(c).add(n);
+            if(transitionsTo.containsKey(c)){
+                transitionsTo.get(c).add(n);
             } else {
-                transitions.put(c, new HashSet<>((List.of(n))));
+                transitionsTo.put(c, new HashSet<>((List.of(n))));
+            }
+            if(n.transitionsFrom.containsKey(c)){
+                n.transitionsFrom.get(c).add(this);
+            } else {
+                n.transitionsFrom.put(c, new HashSet<>((List.of(this))));
             }
         }
 
         public void deleteTransition(Character c, Node n){
-            if(transitions.containsKey(c)){
-                transitions.get(c).remove(n);
+            if(transitionsTo.containsKey(c)){
+                transitionsTo.get(c).remove(n);
+            }
+            if(n.transitionsFrom.containsKey(c)){
+                n.transitionsFrom.get(c).remove(this);
             }
         }
     }
@@ -100,8 +110,8 @@ sealed public class NFA permits DFA{
         HashSet<Node> epsilon = new HashSet<>(nodes);
         for(int i = 0; i < this.nodes.size(); i++){
             for(Node n : nodes){
-                if(n.transitions.containsKey(null)){
-                    epsilon.addAll(n.transitions.get(null));
+                if(n.transitionsTo.containsKey(null)){
+                    epsilon.addAll(n.transitionsTo.get(null));
                 }
             }
             nodes.addAll(epsilon);
@@ -115,13 +125,42 @@ sealed public class NFA permits DFA{
             current = _epsilonClosure(current);
             HashSet<Node> next = new HashSet<>();
             for(Node n : current){
-                if(n.transitions.containsKey(s.charAt(i))){
-                    next.addAll(n.transitions.get(s.charAt(i)));
+                if(n.transitionsTo.containsKey(s.charAt(i))){
+                    next.addAll(n.transitionsTo.get(s.charAt(i)));
                 }
             }
             current = next;
         }
         current = _epsilonClosure(current);
         return current.contains(end);
+    }
+
+    public void removeEpsilon(){
+        for(Node n: nodes.values()){
+            if(!n.transitionsTo.containsKey(null)){
+                continue;
+            }
+            HashSet<Node> epsilon = new HashSet<>(n.transitionsTo.get(null));
+            epsilon = _epsilonClosure(epsilon);
+            for(Node m : epsilon){
+                if(m == n){
+                    continue;
+                }
+                for(Character c : m.transitionsTo.keySet()){
+                    if(c == null){
+                        continue;
+                    }
+                    for(Node o : m.transitionsTo.get(c)){
+                        n.addTransition(c, o);
+                    }
+                }
+            }
+        }
+        for(Node n : nodes.values()){
+            if(!(n == start || n == end)){
+                n.transitionsTo.remove(null);
+                n.transitionsFrom.remove(null);
+            }
+        }
     }
 }
